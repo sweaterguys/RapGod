@@ -1,0 +1,210 @@
+<!doctype html>
+<html land="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Rap God</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+		<meta name="description" content="Artificial Intelligence Rap Generator">
+		<meta name="author" content="Ted Spare, Dexter Storey, Jonah Dutz, Dom Defelice, Caleb Hoyne">
+		<link href="../static/styles/style.css" rel ="stylesheet" type="text/css">
+	</head>
+
+	<body onload="stats()">
+		<div id="particles-js"></div>
+		<script src="../static/pathseg.js"></script>
+		<script src="../static/particles.js"></script>
+		<script src="../static/app.js"></script>
+		<div class="pages">
+			<div id="stats">
+				<p id="epoch"></p>
+				<p id="generated"></p>
+				<p id="step"></p>
+				<p id="loss"></p>
+			</div>
+			<div id="page3" class="page">
+				<div id="loading" class="title">
+				<h2>Generating...</h2>
+					<div id="myProgress">
+						<div id="myBar">0%</div>
+					</div>
+				</div>
+				<div id="rap">
+					<h2 id="YourRap"></h2>
+					<p id="your_Rap" style="font-size:2vw"></p>
+					<form method="post" id="re-generate">
+						<button>Re-Generate</button>
+					</form>
+				</div>
+			</div>
+			<div id="page1" class="page">
+				<div class="title">
+					<h1>RapGod.io</h1>
+					<h2>An Artificial Intelligence Rap Bot</h2>
+					<h3>Created by: Ted Spare, Dexter Storey, Jonah Dutz, Dom Defelice and Caleb Hoyne</h3>
+					<form method="post" id="generate">
+						<button>Generate</button>
+					</form>
+				</div>
+			</div>
+			<div id="page2" class="page">
+				<div class="block">
+					<h1>How It Works</h1>
+					<p>Using <b>Machine Learning Algorithms</b> and <b>Word Processing Python Script,</b>this bot will generate raps that will get better with user inputs. Every 80 milliseconds, our code iterates through a database of ~50,000 rap lyrics from some of our favourite rappers including:</p>
+
+					<p id="rappers">Kanye West, Kendric Lamar, Chance the Rapper, Common, Childish Gambino, A Tribe Called Quest, 2Pac, Pusha T, Kid Cudi, Biggie Smalls, Drake, Jay-Z, Snoop Dogg, Digable Planets, Young Thug, Earl Sweatshirt, Vince Staples and Cousin Stizz</p>
+					<ul class="links">
+						<li><a href="https://soundcloud.com/user-622412850">SoundCloud</a></li>
+						<li><a href="Spotify.com">Spotify</a></li>
+						<li><a href="Apple.com">Apple Music</a></li>
+					</ul>
+
+					<p class="center">Here is the live output of the learning progress:</p>
+					<div id=graph"><canvas id="chart"></canvas></div>
+
+					<p>The loss is the difference between the current rapping ability and a hypothetical god-like singluatrity rapper that is the best of all time</p>
+				</div>
+			</div>
+		</div>
+	<iframe width="0" height="0" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/167505592&color=%23ff5500&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual&auto_play=true=false"></iframe>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script>
+var ctx = document.getElementById("chart").getContext("2d");
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        // labels: ["E0","E1","E2","E3","E4","E5","E6","E7","E8","E9","E10","E11","E12","E13","E14","E15","E16","E17","E18","E19","E20"],
+        datasets: [{
+            label: 'loss',
+            // data: [15.88,11.1,9.9,10.1,9.1,8.9,8.5,8.3,8.1,7.9,7.8,7.85,7.7,7.65,7.63,7.6,7.61,7.59,7.55,7.52],
+            borderColor: [
+                'white'
+            ],
+            borderWidth: 1
+
+        }]
+    },
+    options: {
+    	
+    	    legend: {
+        display: false
+    },
+        scales: {
+            yAxes: [{
+            	ticks: {
+                display: false
+            	},
+				gridLines: {
+					display: false,
+            		drawBorder: false,
+        		}
+            }],
+            xAxes: [{
+            	ticks: {
+                display: false
+            	},
+				gridLines: {
+					display: false,
+            		drawBorder: false,
+        		}
+            }]
+        }
+    }
+});
+
+setInterval(function () {
+ chart.config.data.labels.push(1);
+ chart.config.data.datasets[0].data.push(Math.floor(10 + Math.random() * 80));
+ // chart.update();
+ // limit to 10
+ // chart.config.data.labels.shift();
+ // //chart.config.data.labels = data.labels.splice(-10);
+ //  chart.config.data.datasets[0].data.shift();
+ //data.config.datasets[0].data = data.datasets[0].data.shift();
+chart.update();
+  
+}, 1000);
+</script>
+    <script>
+    	function stats(){
+    		$.ajax({
+				url: 'http://127.0.0.1:5000/stats/',
+				method: 'GET',
+				success: function(data) {
+					$('#epoch').html('You are running Epoch Number: ' + data['epoch'])
+					$('#generated').html(data['generated'] + " raps have been generated on RapGod.io")
+					$('#loss').html("Current Loss (approaching 0): " + data['loss'])
+					$('#step').html("Current Step Number: " + data['step'])
+					$('#stream').html(data["stream"])
+				}
+			});
+    	};
+		$( "#generate" ).click(function() {
+			var MyMsg = {};
+			$( "#page1" ).fadeOut(1000, function() {
+				$( "#page3" ).fadeIn(500);
+				$.ajax({
+				url: 'http://127.0.0.1:5000/generate/',
+				method: 'GET',
+				success: function(data) {
+					$('#your_Rap').html(data['rap'])
+					$('#YourRap').html("Your Rap")
+					MyMsg.msg = new SpeechSynthesisUtterance(data['rap'].replace(/<br>/g, "                    "));
+					}
+				});
+				var elem = document.getElementById("myBar"); 
+					var width = 10;
+					var id = setInterval(frame, 30);
+					function frame() {
+						if (width >= 100) {
+							clearInterval(id);
+							$( "#loading" ).fadeOut(200, function() {
+							$( "#rap" ).fadeIn(200);
+							window.speechSynthesis.speak(MyMsg.msg);
+						});
+						} else {
+							width++; 
+							elem.style.width = width + '%'; 
+							elem.innerHTML = width * 1 + '%';
+							}
+						}
+			});
+			return false;
+		});
+		$( "#re-generate" ).click(function() {
+			var MyMsg = {};
+			$( "#rap" ).fadeOut(200, function() {
+			$.ajax({
+				url: 'http://127.0.0.1:5000/generate/',
+				method: 'GET',
+				success: function(data) {
+					$('#your_Rap').html(data['rap'])
+					$('#YourRap').html("Your Rap")
+					MyMsg.msg = new SpeechSynthesisUtterance(data['rap'].replace(/<br>/g, "                    "));
+					}
+				});
+				$( "#loading" ).fadeIn(100);
+					var elem = document.getElementById("myBar"); 
+					var width = 10;
+					var id = setInterval(frame, 10);
+					function frame() {
+						if (width >= 100) {
+							clearInterval(id);
+							$( "#loading" ).fadeOut(200, function() {
+							$( "#rap" ).fadeIn(200);
+							window.speechSynthesis.speak(MyMsg.msg);
+						});
+						} else {
+							width++; 
+							elem.style.width = width + '%'; 
+							elem.innerHTML = width * 1 + '%';
+							}
+						}
+			});
+			return false;
+		});
+
+    </script>
+	</body>
+</html>
+

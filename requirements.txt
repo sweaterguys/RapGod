@@ -1,0 +1,12 @@
+numpy
+Keras
+bs4
+matplotlib
+pyttsx3
+six
+pronouncing
+dash
+plotly
+Flask
+python-dateutil==2.6.1
+zappa
