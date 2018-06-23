@@ -1,8 +1,7 @@
 #RapGod.py
 from flask import Flask, render_template, request, jsonify
-from modules.generate import generator
+from python.generate import generator
 from multiprocessing import Value
-import dash
 global epoch, loss, step
 counter = Value('i',0)
 
