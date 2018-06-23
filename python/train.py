@@ -103,7 +103,7 @@ def train():
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
 	call1 = ModelCheckpoint(filepath, monitor='loss', verbose=0, save_best_only=True, mode='min')
-	call2 = callbacks.RemoteMonitor(root='http://127.0.0.1:5000', field='epic', path='/publish/epoch/')
+	call2 = callbacks.RemoteMonitor(root='http://0.0.0.0:80', field='epic', path='/publish/epoch/')
 	call3 = NBatchLogger(display=1)
 	callbacks_list = [call1, call2, call3]
 	# Fit the model.
