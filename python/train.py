@@ -1,15 +1,8 @@
 
-# This script trains an Long-Short-Term-Memory model to generate rap lyrics
-# from a dataset of rap lyrics. 
-# THIS TRAINING ALGORITHM IS SO QUICK COMPARED TO ANYTHING ELSE
-# This is the right way to do it
-
-# As of 6am Thursday, 21 June this works!
-
 from __future__ import print_function
 import numpy as np
-import random, sys, os, codecs, collections, requests
-from keras.models import Sequential
+import random, sys, os, codecs, re, random, collections
+from keras.models import Sequential, load_model
 from keras.callbacks import History 
 from keras.layers import Dense, Activation
 from keras.layers import LSTM
@@ -21,7 +14,7 @@ from keras.callbacks import ModelCheckpoint
 from keras.callbacks import Callback
 
 host = "localhost"
-port = "5000"
+port = "80"
 
 class NBatchLogger(Callback):
     def __init__(self, display):
@@ -48,39 +41,36 @@ class NBatchLogger(Callback):
             	print("fuck")
             self.metric_cache.clear()
 
-def train():
-	directory = 'data/' # directory to store models.
-	filepath = os.path.join(directory, "Model.h5")
+###########################################################################
+#  				      H     Y   P   E  R PARAMETERS 					  #
+rnn_size = 512
+batch_size = 15
+seq_length = 15
+num_epochs = 10
+learning_rate = 0.002
+sequences_step = 2
+bars = 8
+###########################################################################
+corpus = 'MFDoom'
+vocab = '{}_Vocab_{}_Epochs.pkl'.format(corpus, num_epochs)
+neural_network = '{}_Model_{}_Epochs.h5'.format(corpus, num_epochs)
+###########################################################################
 
-	###########################################################################
-	#  S O L I D  G O L D  H E R E 
-	###########################################################################
-	rnn_size = 128 # size of RNN
-	batch_size = 30 # minibatch size
-	seq_length = 15 # sequence length
-	num_epochs = 20 # number of epochs
-	learning_rate = 0.002 # learning rate
-	sequences_step = 3 # step to create sequences
-	###########################################################################
-
-	# Load input text.
-	input_file = os.path.join(directory, 'lyrics.txt')
-	vocab_file = os.path.join(directory, 'vocab.pkl')
-
+def train(vocab):
+	input_file = os.path.join('MF-Doom.txt')
+	vocab_file = os.path.join(vocab)
 	with codecs.open(input_file, 'r', encoding = None) as f:
 	    data = f.read()
-
-	# Prepare input text.
 	x_text = data.split()
 	word_counts = collections.Counter(x_text)
 	vocabulary_inv = [x[0] for x in word_counts.most_common()]
-	vocabulary_inv = list(sorted(vocabulary_inv))
-	vocab = {x: i for i, x in enumerate(vocabulary_inv)}
 	words = [x[0] for x in word_counts.most_common()]
 	vocab_size = len(words)
+	vocabulary_inv = list(sorted(vocabulary_inv))
+	vocabs = {x: i for i, x in enumerate(vocabulary_inv)}
 
 	with open(os.path.join(vocab_file), 'wb') as f:
-	    cPickle.dump((words, vocab, vocabulary_inv), f)
+	    cPickle.dump((words, vocabs, vocabulary_inv), f)
 
 	sequences = []
 	next_words = []
@@ -88,28 +78,24 @@ def train():
 	    sequences.append(x_text[i: i + seq_length])
 	    next_words.append(x_text[i + seq_length])
 
-
-	# Vectorize words.
 	X = np.zeros((len(sequences), seq_length, vocab_size), dtype = np.bool)
 	y = np.zeros((len(sequences), vocab_size), dtype = np.bool)
 	for i, sentence in enumerate(sequences):
 	    for t, word in enumerate(sentence):
-	        X[i, t, vocab[word]] = 1
-	    y[i, vocab[next_words[i]]] = 1
+	        X[i, t, vocabs[word]] = 1
+	    y[i, vocabs[next_words[i]]] = 1
 
-
-	# Build the model.
 	model = Sequential()
 	model.add(LSTM(rnn_size, input_shape = (seq_length, vocab_size)))
 	model.add(Dense(vocab_size))
 	model.add(Activation('softmax'))
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
-	call1 = ModelCheckpoint(filepath, monitor='loss', verbose=0, save_best_only=True, mode='min')
+	call1 = ModelCheckpoint(neural_network, monitor='loss', verbose=0, save_best_only=True, mode='min')
 	call2 = callbacks.RemoteMonitor(root='http://0.0.0.0:80', field='epic', path='/publish/epoch/')
 	call3 = NBatchLogger(display=1)
 	callbacks_list = [call1, call2, call3]
-	# Fit the model.
-	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks=callbacks_list)
-train()
+	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks = callbacks_list)
+
+train(vocab)
 

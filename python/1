@@ -1,4 +1,0 @@
-  File "train.py", line 23
-    var host = "0.0.0.0"
-           ^
-SyntaxError: invalid syntax
