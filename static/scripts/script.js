@@ -1,5 +1,4 @@
-var port = "80"
-var host = "35.196.198.150"
+URL = "http://35.196.198.150:80"
 var ctx = document.getElementById("chart").getContext("2d");
 var chart = new Chart(ctx, {
 	type: 'line',
@@ -42,7 +41,7 @@ var chart = new Chart(ctx, {
 
 setInterval(function(){
 	$.ajax({
-		url: 'http://'+host+':'+port+'/generate/',
+		url: URL+"/stats/",
 		method: 'GET',
 		success: function(data) {
 			$('#epoch').html('You are running Epoch Number: ' + data['epoch'])
@@ -60,7 +59,7 @@ $( "#generate" ).click(function() {
 	var MyMsg = {};
 	$( "#page1" ).fadeOut(500, function() {
 		$.ajax({
-			url: 'http://'+host+':'+port+'/generate/',
+			url: URL+"/generate/",
 			method: 'GET',
 			success: function(data) {
 				$( "#page3" ).fadeIn(500);
@@ -92,7 +91,7 @@ $( "#re-generate" ).click(function() {
 	var MyMsg = {};
 	$( "#rap" ).fadeOut(200, function() {
 		$.ajax({
-			url: 'http://'+host+':'+port+'/generate/',
+			url: URL+"/generate/",
 			method: 'GET',
 			success: function(data) {
 				$('#your_Rap').html(data['rap'])

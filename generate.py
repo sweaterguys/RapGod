@@ -1,7 +1,7 @@
 
 from __future__ import print_function
 import numpy as np
-import random, sys, os, pyttsx3, re, pronouncing, random
+import random, sys, os, re, pronouncing, random
 from keras.models import load_model
 from six.moves import cPickle
 

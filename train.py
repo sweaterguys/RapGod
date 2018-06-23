@@ -89,11 +89,11 @@ def train(vocab):
 	model.add(Activation('softmax'))
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
-	call1 = ModelCheckpoint(neural_network, monitor='loss', verbose=0, save_best_only=True, mode='min')
 	call2 = callbacks.RemoteMonitor(root=url, field='epic', path='/publish/epoch/')
 	call3 = NBatchLogger(display=1)
-	callbacks_list = [call1, call2, call3]
+	callbacks_list = [call2, call3]
 	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks=callbacks_list)
+	model.save(neural_network)
 
 train(vocab)
 
