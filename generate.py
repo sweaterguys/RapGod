@@ -17,8 +17,8 @@ sequences_step = 8
 bars = 8
 ###########################################################################
 corpus = 'MFDoom'
-vocab = '{}_Vocab_{}_Epochs.pkl'.format(corpus, num_epochs)
-neural_network = '{}_Model_{}_Epochs.h5'.format(corpus, num_epochs)
+vocab = 'epoch.pkl'
+neural_network = 'epoch.h5'
 ###########################################################################
 def generator():
 	def quickRhyme(word):

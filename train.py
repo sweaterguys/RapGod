@@ -13,7 +13,7 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-url = "http://35.196.198.150:80"
+url = "http://35.203.30.219:80"
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0
@@ -50,8 +50,8 @@ sequences_step = 2
 bars = 8
 ###########################################################################
 corpus = 'MFDoom'
-vocab = '{}_Vocab_{}_Epochs.pkl'.format(corpus, num_epochs)
-neural_network = '{}_Model_{}_Epochs.h5'.format(corpus, num_epochs)
+vocab = 'epoch.pkl'
+neural_network = 'epoch.h5'
 ###########################################################################
 
 def train(vocab):
@@ -89,11 +89,11 @@ def train(vocab):
 	model.add(Activation('softmax'))
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
+	call1 = ModelCheckpoint(neural_network, monitor='loss', verbose=0, save_best_only=True, mode='min')
 	call2 = callbacks.RemoteMonitor(root=url, field='epic', path='/publish/epoch/')
 	call3 = NBatchLogger(display=1)
-	callbacks_list = [call2, call3]
+	callbacks_list = [call1, call2, call3]
 	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks=callbacks_list)
-	model.save(neural_network)
 
 train(vocab)
 
