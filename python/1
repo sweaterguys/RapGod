@@ -1,7 +1,4 @@
-Using TensorFlow backend.
-Traceback (most recent call last):
-  File "train.py", line 111, in <module>
-    train()
-  File "train.py", line 90, in train
-    X = np.zeros((len(sequences), seq_length, vocab_size), dtype = np.bool)
-MemoryError
+  File "train.py", line 23
+    var host = "0.0.0.0"
+           ^
+SyntaxError: invalid syntax

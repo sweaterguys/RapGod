@@ -20,6 +20,9 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
+var host = "0.0.0.0"
+var port = "80"
+
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0
@@ -40,7 +43,7 @@ class NBatchLogger(Callback):
                     metrics_log += ' - %s: %.4e' % (k, val)
             data = str('step: {}/{} ... {}'.format(self.step,self.params['steps'],metrics_log))
             try:
-            	requests.post('http://127.0.0.1:5000/publish/step/', data=data)
+            	requests.post('http://'+host+':'+port+'/publish/step/', data=data)
             except:
             	print("fuck")
             self.metric_cache.clear()
