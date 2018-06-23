@@ -20,8 +20,8 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-var host = "0.0.0.0"
-var port = "80"
+host = "localhost"
+port = "5000"
 
 class NBatchLogger(Callback):
     def __init__(self, display):

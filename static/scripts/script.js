@@ -1,5 +1,5 @@
-var port = "80"
-var host = "0.0.0.0"
+var port = "5000"
+var host = "localhost"
 var ctx = document.getElementById("chart").getContext("2d");
 var chart = new Chart(ctx, {
 	type: 'line',
@@ -50,9 +50,9 @@ setInterval(function(){
 			$('#loss').html("Current Loss (approaching 0): " + data['loss'])
 			$('#step').html("Current Step Number: " + data['step'])
 			$('#stream').html(data["stream"])
-			chart.config.data.labels.push(1);
-			chart.config.data.datasets[0].data.push(data['loss']);
-			chart.update();
+			chart.config.data.labels.push(1)
+			chart.config.data.datasets[0].data.push(data['loss'])
+			chart.update()
 		}
 	});
 }, 500);
