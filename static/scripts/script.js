@@ -42,7 +42,7 @@ var chart = new Chart(ctx, {
 
 setInterval(function(){
 	$.ajax({
-		url: 'http://127.0.0.1:5000/stats/',
+		url: 'http://'+host+':'+port+'/generate/',
 		method: 'GET',
 		success: function(data) {
 			$('#epoch').html('You are running Epoch Number: ' + data['epoch'])
