@@ -1,7 +1,7 @@
 
 from __future__ import print_function
 import numpy as np
-import random, sys, os, codecs, re, random, collections
+import random, sys, os, codecs, re, random, collections, requests
 from keras.models import Sequential, load_model
 from keras.callbacks import History 
 from keras.layers import Dense, Activation
@@ -13,9 +13,7 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-host = "localhost"
-port = "80"
-
+url = "http://127.0.0.1:5000"
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0
@@ -36,7 +34,7 @@ class NBatchLogger(Callback):
                     metrics_log += ' - %s: %.4e' % (k, val)
             data = str('step: {}/{} ... {}'.format(self.step,self.params['steps'],metrics_log))
             try:
-            	requests.post('http://'+host+':'+port+'/publish/step/', data=data)
+            	requests.post(url+"/publish/step/", data=data)
             except:
             	print("fuck")
             self.metric_cache.clear()
@@ -92,10 +90,10 @@ def train(vocab):
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
 	call1 = ModelCheckpoint(neural_network, monitor='loss', verbose=0, save_best_only=True, mode='min')
-	call2 = callbacks.RemoteMonitor(root='http://0.0.0.0:80', field='epic', path='/publish/epoch/')
+	call2 = callbacks.RemoteMonitor(root=url+"/publish/epoch/", field='epic', path='/publish/epoch/')
 	call3 = NBatchLogger(display=1)
 	callbacks_list = [call1, call2, call3]
-	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks = callbacks_list)
+	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks=callbacks_list)
 
 train(vocab)
 

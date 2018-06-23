@@ -1,6 +1,6 @@
 #RapGod.py
 from flask import Flask, render_template, request, jsonify
-from python.generate import generator
+from generate import generator
 from multiprocessing import Value
 global epoch, loss, step
 counter = Value('i',0)
@@ -48,4 +48,4 @@ def step():
 	return "hi"
 
 if __name__ == '__main__':
-	app.run(host="localhost",port="5000")
+	app.run(host="35.196.198.150", port="80")
