@@ -13,7 +13,7 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-url = "http://35.203.30.219:80"
+url = "http://127.0.0.0:5000"
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0
@@ -41,7 +41,7 @@ class NBatchLogger(Callback):
 
 ###########################################################################
 #  				      H     Y   P   E  R PARAMETERS 					  #
-rnn_size = 512
+rnn_size = 8
 batch_size = 15
 seq_length = 15
 num_epochs = 10
@@ -49,13 +49,12 @@ learning_rate = 0.002
 sequences_step = 2
 bars = 8
 ###########################################################################
-corpus = 'MFDoom'
 vocab = 'epoch.pkl'
 neural_network = 'epoch.h5'
 ###########################################################################
 
 def train(vocab):
-	input_file = os.path.join('MF-Doom.txt')
+	input_file = os.path.join('raps.txt')
 	vocab_file = os.path.join(vocab)
 	with codecs.open(input_file, 'r', encoding = None) as f:
 	    data = f.read()
