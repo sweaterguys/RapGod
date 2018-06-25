@@ -1,4 +1,5 @@
-Read Me!
+# RapGod.io
+[rapgod.io](rapgod.io)
 
 Rap God uses an AI to generate word strings that in theory make sense and get better with time.
 It trains (train.py) on raps.txt (a database of bars from our favourite rappers)
@@ -11,12 +12,12 @@ When a user opens the website, a get request to flask renders the html, Js, and 
 When the user hits "generate" A get method is sent to flask which then triggers generate.py to return a verse of rap. 
 This means that every single rap will be unique and original, no user will ever hear the same rap.
 
-Usage:
-- install python2
+## Usage
+- install python2.7
 
 - install pip
 
-- pip install -r requirements.txt
+run: `pip install -r requirements.txt`
 
 	For local hosting:
 	- change ports on the following files: 
@@ -31,7 +32,20 @@ Usage:
 		train.py (YOUR_EXTERNAL_IP:80)
 
 
-- ./run.sh
+run `./run.sh`
+
+## Docker
+
+Build the container:
+```
+docker build . -t rapgod 
+```
+
+Run the container in interactive mode:
+```
+docker run --name=rapgod -p 80:80 -it rapgod:latest /bin/bash
+```
+And then run `./run.sh`
 
 Next Steps:
 - Make Generate lighter
