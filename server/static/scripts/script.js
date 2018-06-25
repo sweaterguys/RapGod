@@ -1,4 +1,4 @@
-URL = "http://35.203.30.219:80";
+URL = "http://35.203.113.155:80";
 
 var ctx = document.getElementById("chart").getContext("2d");
 var chart = new Chart(ctx, {

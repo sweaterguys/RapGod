@@ -13,7 +13,7 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-url = "http://35.203.30.219:80"
+url = "http://35.203.113.155:80"
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0

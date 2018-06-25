@@ -7,6 +7,7 @@ from keras.models import load_model
 import numpy as np
 from six.moves import cPickle
 from flask_socketio import SocketIO, emit
+from keras import backend as K
 
 global epoch, loss, step
 counter = Value('i',0)
@@ -106,7 +107,7 @@ def epoch():
 	args = str(request.values)
 	global epoch
 	epoch = args.split('"epoch": ')[1].split(",")[0]
-
+	K.clear_session()
 	return "hi"
 
 @app.route('/publish/step/', methods=['POST'])
@@ -119,5 +120,5 @@ def step():
 	return "hi"
 
 if __name__ == '__main__':
-	app.run(port="0.0.0.0", host="80")
+	app.run(host="0.0.0.0", port="80") 
 	# app.run()
