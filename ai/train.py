@@ -44,7 +44,7 @@ class NBatchLogger(Callback):
 rnn_size = 512
 batch_size = 15
 seq_length = 15
-num_epochs = 100
+num_epochs = 100000
 learning_rate = 0.002
 sequences_step = 3
 ###########################################################################
