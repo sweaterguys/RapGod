@@ -101,5 +101,23 @@ def stats():
 	data = jsonify(data)
 	return data
 
+@app.route('/publish/epoch/', methods=['POST'])
+def epoch():
+	args = str(request.values)
+	global epoch
+	epoch = args.split('"epoch": ')[1].split(",")[0]
+
+	return "hi"
+
+@app.route('/publish/step/', methods=['POST'])
+def step():
+	args = request.data
+	global step, loss
+	step = args.split("step: ")[1].split("/")[0]
+	loss = args.split("- loss: ")[1]
+
+	return "hi"
+
 if __name__ == '__main__':
-	app.run()
+	app.run(port="0.0.0.0", host="80")
+	# app.run()

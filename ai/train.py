@@ -13,7 +13,7 @@ from keras.callbacks import ModelCheckpoint
 
 from keras.callbacks import Callback
 
-url = "http://127.0.0.0:5000"
+url = "http://35.203.113.155:80"
 class NBatchLogger(Callback):
     def __init__(self, display):
         self.step = 0
@@ -44,7 +44,7 @@ class NBatchLogger(Callback):
 rnn_size = 512
 batch_size = 15
 seq_length = 15
-num_epochs = 20
+num_epochs = 100
 learning_rate = 0.002
 sequences_step = 3
 ###########################################################################
@@ -88,7 +88,9 @@ def train(vocab):
 	optimizer = RMSprop(lr = learning_rate)
 	model.compile(loss = 'categorical_crossentropy', optimizer = optimizer, metrics = ['accuracy'])
 	call1 = ModelCheckpoint(neural_network, monitor='loss', verbose=1, save_best_only=True, mode='min')
-	callbacks_list = [call1]
+	call2 = NBatchLogger(display=1)
+	call3 = callbacks.RemoteMonitor(root=url, field='epic', path='/publish/epoch/')
+	callbacks_list = [call1, call2, call3]
 	model.fit(X, y, batch_size = batch_size, epochs = num_epochs, validation_split = 0.3, verbose = 1, callbacks=callbacks_list)
 
 train(vocab)
