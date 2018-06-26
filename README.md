@@ -1,6 +1,5 @@
 
 ![license](https://img.shields.io/github/license/mashape/apistatus.svg)
-![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
 ![Docker Build Status](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
 
