@@ -1,3 +1,9 @@
+
+![license](https://img.shields.io/github/license/mashape/apistatus.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
+![Docker Build Status](https://img.shields.io/docker/build/jrottenberg/ffmpeg.svg)
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)
+
 # RapGod.io
 [rapgod.io](rapgod.io)
 
@@ -47,7 +53,7 @@ docker run --name=rapgod -p 80:80 -it rapgod:latest /bin/bash
 ```
 And then run `./run.sh`
 
-Next Steps:
+## Next Steps:
 - Make Generate lighter
 
 - Fix JS bugs
@@ -58,7 +64,7 @@ Next Steps:
 
 - Integrate with Lyrebird
 
-Credits: 
+## Credits: 
 - Ted Spare (AI algorithm, Generate.py, Train.py)
 - Dexter Storey (Flask, HTML, CSS, JS)
 - Jonah Dutz (general ML research and help on Train.py, Generate.py)
