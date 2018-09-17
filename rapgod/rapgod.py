@@ -1,15 +1,17 @@
 # rapgod.py
 
 # trains an LSTM on 1x8 vectors corresponding to rap lines from raps.txt
-import numpy, pronouncing, random
+import numpy
 import matplotlib.pyplot as plot
+from random import choice
+from pronouncing import rhymes as rhyme
+from preprocess import pos2random
 from keras.layers import LSTM, Dense, Embedding
 from keras.models import Sequential, load_model
 from keras import backend as K
-from preprocess import pos2random
 
 
-# to build a better model, simply set train_mode=True and tweak hyperparameters
+# to improve the model with your latest insights, simply set train_mode=True and tweak hyperparameters
 def ai(batch_size=5, epochs=20, train_mode=False):
 
 	def train(batch_size, epochs):
@@ -62,7 +64,7 @@ def ai(batch_size=5, epochs=20, train_mode=False):
 		line = []
 
 		# recursive function to generate n lines of rap
-		def bar(model, seed, count=8, depth=0):
+		def bar(model, seed, count=16, depth=0):
 
 			if depth == count:
 				return
@@ -70,9 +72,6 @@ def ai(batch_size=5, epochs=20, train_mode=False):
 			predict = model.predict(seed.reshape((1, 4, 1)))
 			pred = predict.tolist()[0]
 			start = numpy.append(seed[2:], pred[:2])
-
-			for i in pred:
-				print(pos2random(int(round(i))))
 
 			if depth > 0:
 				for i in pred:
@@ -84,22 +83,24 @@ def ai(batch_size=5, epochs=20, train_mode=False):
 		bar(model, start)
 
 		for i in range(len(line)):
-			if (i + 1) % 8 == 0 and i > 7:
-				rhymes = pronouncing.rhymes(line[i])
+			if (i + 1) % 8 == 0:
+				rhymes = rhyme(line[i])
 				if rhymes:
-					line.insert(i + 1, random.choice(rhymes))
-				# else:
-					# line[i] = ""
+					swap = choice(rhymes)
+					if swap in line[i - 6] or line[i - 6] in swap:
+						swap = choice(rhymes)
+					line.insert(i - 6, swap)
+					line.insert(i + 2, "\n")
 
 		line = " ".join(line)
 		print(line)
+
 		return line
 
+
 	if train_mode:
-		history = train(batch_size, epochs)
-		generate()
-	else:
-		generate()
+		train(batch_size, epochs)
+	generate()
 
 
 if __name__ == "__main__":
